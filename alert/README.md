@@ -24,6 +24,8 @@ Add `SNS_STOCK_TOPIC_ARN` to the Laravel root `.env`. AWS credentials and region
 npm run dry-run
 ```
 
+This calculates and prints the alert but intentionally does not send email. Use `npm run alert` to publish the alert through SNS.
+
 ## Run once and publish
 
 ```powershell

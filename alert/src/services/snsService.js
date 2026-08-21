@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const { PublishCommand, SNSClient } = require('@aws-sdk/client-sns');
 
 function publishLowStockAlert(message) {
   const topicArn = process.env.SNS_STOCK_TOPIC_ARN;
@@ -6,15 +6,15 @@ function publishLowStockAlert(message) {
     throw new Error('SNS_STOCK_TOPIC_ARN is not configured.');
   }
 
-  const sns = new AWS.SNS({
+  const sns = new SNSClient({
     region: process.env.AWS_DEFAULT_REGION || 'us-east-1'
   });
 
-  return sns.publish({
+  return sns.send(new PublishCommand({
     TopicArn: topicArn,
     Subject: 'Low new device stock alert',
     Message: message
-  }).promise();
+  }));
 }
 
 module.exports = { publishLowStockAlert };
