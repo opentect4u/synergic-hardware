@@ -89,9 +89,16 @@ async function run(options) {
   const asOfDate = formatDate(options && options.asOfDate);
   const items = await getLowStockItems(asOfDate);
   const message = items.length ? formatMessage(asOfDate, items) : null;
-  const result = { asOfDate, lowStock: items, published: false, message };
+  const dryRun = Boolean(options && options.dryRun);
+  const result = {
+    asOfDate,
+    lowStock: items,
+    published: false,
+    dryRun,
+    message
+  };
 
-  if (items.length && !(options && options.dryRun)) {
+  if (items.length && !dryRun) {
     await snsService.publishLowStockAlert(message);
     result.published = true;
   }
